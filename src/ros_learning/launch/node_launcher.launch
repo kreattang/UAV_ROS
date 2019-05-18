@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="ros_learning" type="printer.py" name="printer_node" output="screen">
+    </node>
+</launch>

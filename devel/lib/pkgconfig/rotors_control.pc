@@ -1,0 +1,8 @@
+prefix=/home/wenbing/Learning_ROS_ws/devel
+
+Name: rotors_control
+Description: Description of rotors_control
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/wenbing/Learning_ROS_ws/devel/lib 
+Requires: 

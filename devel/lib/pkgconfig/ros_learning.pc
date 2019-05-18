@@ -1,0 +1,8 @@
+prefix=/home/wenbing/Learning_ROS_ws/devel
+
+Name: ros_learning
+Description: Description of ros_learning
+Version: 0.0.0
+Cflags: -I/home/wenbing/Learning_ROS_ws/devel/include
+Libs: -L/home/wenbing/Learning_ROS_ws/devel/lib 
+Requires: message_runtime

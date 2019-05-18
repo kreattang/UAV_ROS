@@ -1,0 +1,15 @@
+(cl:defpackage ros_learning-srv
+  (:use )
+  (:export
+   "ADDTWOINTS"
+   "<ADDTWOINTS-REQUEST>"
+   "ADDTWOINTS-REQUEST"
+   "<ADDTWOINTS-RESPONSE>"
+   "ADDTWOINTS-RESPONSE"
+   "WORDCOUNT"
+   "<WORDCOUNT-REQUEST>"
+   "WORDCOUNT-REQUEST"
+   "<WORDCOUNT-RESPONSE>"
+   "WORDCOUNT-RESPONSE"
+  ))
+

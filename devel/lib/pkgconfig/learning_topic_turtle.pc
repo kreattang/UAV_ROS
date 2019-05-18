@@ -1,0 +1,8 @@
+prefix=/home/wenbing/Learning_ROS_ws/devel
+
+Name: learning_topic_turtle
+Description: Description of learning_topic_turtle
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/wenbing/Learning_ROS_ws/devel/lib 
+Requires: 
