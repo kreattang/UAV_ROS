@@ -40,7 +40,7 @@ def publish_command(position,velocity):
 if __name__ == '__main__':
     for i in range(1,10):
         try:
-            publish_command([0,5,2*i],[0,0,0])
+            publish_command([2*i,2*i,2],[0,0,0])
         except rospy.ROSInterruptException:
             pass
         time.sleep(1)
