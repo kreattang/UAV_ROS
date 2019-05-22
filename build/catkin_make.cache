@@ -1,2 +1,2 @@
 create_pkg_test:learning_control_don:learning_topic_turtle:pkg_test:ros_learning
--DCMAKE_BUILD_TYPE=Debug -DCATKIN_DEVEL_PREFIX=/home/wenbing/Learning_ROS_ws/devel -DCMAKE_INSTALL_PREFIX=/home/wenbing/Learning_ROS_ws/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/wenbing/Learning_ROS_ws/devel -DCMAKE_INSTALL_PREFIX=/home/wenbing/Learning_ROS_ws/install -G Unix Makefiles

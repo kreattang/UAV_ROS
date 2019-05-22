@@ -1,0 +1,8 @@
+<launch>
+    <group ns='sim1'>
+    <node>
+    <node>
+    </group>
+    <group>
+    </group>
+</launch>

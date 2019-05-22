@@ -1,17 +1,25 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 
+
+# import msg type
 import rospy
+from std_msgs.msg import String
+from geometry_msgs.msg import PointStamped
+import time
 from trajectory_msgs.msg import MultiDOFJointTrajectory,MultiDOFJointTrajectoryPoint
 from geometry_msgs.msg import Vector3,Twist,Transform,Quaternion,Point
-import std_msgs.msg
 import tf
 import math
+import std_msgs.msg
+import random
 import time
 
 
-#Here, two parameters are the given position and velocity of UAV, respectively.
-def publish_command(position,velocity):
+def publish_command(data):
+    # rospy.init_node('goto_poition',anonymous=True)
     firefly_command_publisher = rospy.Publisher('/firefly/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
+    position = [round(data.point.x) + 1, round(data.point.y) + 1, round(data.point.z)+1]
+    velocity = [0,0,0]
     desired_yaw = -10
     desired_x = position[0]
     desired_y = position[1]
@@ -32,32 +40,23 @@ def publish_command(position,velocity):
     accelerations = Twist()
     point = MultiDOFJointTrajectoryPoint([transform],[velocities],[accelerations],rospy.Time(2))
     traj.points.append(point)
-    time.sleep(3)
     firefly_command_publisher.publish(traj)
     rospy.loginfo("Have published %s into %s!",position+velocity,'/firefly/command/trajectory')
-    
-if __name__ == '__main__':
-    # for i in range(1,10):
-    #     try:
-    #         publish_command([2*i,2*i,2],[0,0,0])
-    #     except rospy.ROSInterruptException:
-    #         pass
-    #     time.sleep(1)
+    rate = rospy.Rate(10)
+    rate.sleep()
+
+def callback(data):
+    rospy.loginfo("Current position:%s,%s,%s", data.point.x,data.point.y,data.point.z)
+    # print(position, velocity)
     try:
-        publish_command([0,0,2],[0,0,0])
+        publish_command(data)
     except rospy.ROSInterruptException:
         pass
-        
 
-
-        
-    
-    
-
-
-
-
-
+rospy.init_node('simple_control')
+pub = rospy.Publisher('position_publish_test', PointStamped)
+rospy.Subscriber("/firefly/ground_truth/position", PointStamped, callback)
+rospy.spin()
 
 
 
