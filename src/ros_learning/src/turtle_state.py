@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 from turtlesim.msg import Pose
-from math import atan2, fabs, pi
+from math import atan2, fabs, pi, sqrt
 from geometry_msgs.msg import Twist
 
 
@@ -17,17 +17,33 @@ def angle_normal(angle):
         return 360 + angle
     else:
         return angle
-
+def euclidean_distance(location, goal_pose):
+        return sqrt(pow((goal_pose[0]- location[0]), 2) +
+                    pow((goal_pose[1] - location[1]), 2))
 def callback(data):
     print(data.x, data.y, data.theta)
-    steer_angle = angle_normal(steering_angle([data.x, data.y], [1,1])/pi*180.0)
+    steer_angle = steering_angle([data.x, data.y], [10,10])
     print("Should Steer Angle: ", steer_angle)
-    current_angle = angle_normal(data.theta/pi*180.0)
+    current_angle = data.theta
     print("Current Heading Angle: ", current_angle)
-    abs_angle = s
+    abs_angle = steer_angle - current_angle
+    print("Relative Angle:", abs_angle)
+    vel_msg = Twist()
+    vel_msg.linear.x = 0.6
+    vel_msg.linear.y = 0
+    vel_msg.linear.z = 0
+    vel_msg.angular.x = 0
+    vel_msg.angular.y = 0
+    vel_msg.angular.z = 0
+    if fabs(abs_angle) > 0.01:
+        vel_msg.angular.z = 10*abs_angle
+    if euclidean_distance([data.x, data.y], [10, 10]) < 1:
+        vel_msg.linear.x = 0
+    velocity_publisher.publish(vel_msg)
+    print('Have Published :', vel_msg.angular.z)
+
+
     
-
-
 
 def listener():
     '''learning_topic Subscriber'''

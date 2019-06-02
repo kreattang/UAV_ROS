@@ -11,6 +11,7 @@ import time
 
 #Here, two parameters are the given position and velocity of UAV, respectively.
 def publish_command(position,velocity):
+    rospy.init_node('goto_poition',anonymous=True)
     firefly_command_publisher = rospy.Publisher('/firefly/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
     desired_yaw = -10
     desired_x = position[0]

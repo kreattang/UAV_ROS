@@ -36,7 +36,7 @@ def publish_command(position,velocity):
     R1.location_x, R1.location_y, R1.location_z = position[0], position[1], position[2]
     quaternion = tf.transformations.quaternion_from_euler(0,0,math.radians(desired_yaw))
     traj = MultiDOFJointTrajectory()
-    header = std_msgs.msg.Header()
+    header = stdnfo("Have published")_msgs.msg.Header()
     header.stamp = rospy.Time()
     header.frame_id = 'frame'
     traj.joint_names.append('base_link')

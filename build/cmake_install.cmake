@@ -122,6 +122,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/wenbing/Learning_ROS_ws/build/learning_control_don/cmake_install.cmake")
   include("/home/wenbing/Learning_ROS_ws/build/pkg_test/cmake_install.cmake")
   include("/home/wenbing/Learning_ROS_ws/build/ros_learning/cmake_install.cmake")
+  include("/home/wenbing/Learning_ROS_ws/build/RVO_rospy/cmake_install.cmake")
 
 endif()
 
