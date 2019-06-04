@@ -7,9 +7,9 @@ from geometry_msgs.msg import Vector3,Twist,Transform,Quaternion,Point
 import time, tf, math
 import std_msgs.msg
 from math import atan2, cos, sin, sqrt
-
+from collision_detection import collision_detecter
 class Robot():
-    def __init__(self, location, target):
+    def __init__(self, location, target, velocity):
         self.location_x = 100
         self.location_y = 100
         self.location_z = 100
@@ -19,11 +19,27 @@ class Robot():
         self.target_x = target[0]
         self.target_y = target[1]
         self.target_z = target[2]
+        self.velocity = velocity
+        self.velocity_angle = 0
         self.pose_subscriber =  rospy.Subscriber("/firefly/ground_truth/odometry", Odometry, self.update_pose)
     def update_pose(self, data):
         self.location_x = data.pose.pose.position.x
         self.location_y = data.pose.pose.position.y
         self.location_z = data.pose.pose.position.z
+
+class Intruder():
+    def __init__(self, intruder_name):
+        self.name = intruder_name
+        self.location_x = 100
+        self.location_y = 100
+        self.location_z = 100
+        self.pose_subscriber =  rospy.Subscriber('/'+self.name+'/ground_truth/odometry', Odometry, self.update_pose)
+    def update_pose(self, data):
+        self.location_x = data.pose.pose.position.x
+        self.location_y = data.pose.pose.position.y
+        self.location_z = data.pose.pose.position.z
+
+
 
 def publish_command(position,velocity):
     desired_yaw = -10
@@ -55,7 +71,8 @@ def collision_detection():
 def steering_angle():
     # retutn the direction agle
     return atan2(R1.target_y - R1.location_y, R1.target_x- R1.location_x)
-
+def collision_detection():
+    return False
 def distance2target():
     return sqrt(pow((R1.target_x - R1.location_x), 2) +
                     pow((R1.target_y - R1.location_y), 2))
@@ -63,13 +80,25 @@ def distance2target():
 def distance2initial():
     return sqrt(pow((R1.initial_x - R1.location_x), 2) +
                     pow((R1.initial_y - R1.location_y), 2))
+
 def callback(data):
-    # update_pose(data)
+    owner = [R1.location_x, R1.location_y, R1.location_z, R1.velocity, R1.velocity_angle]
+    # print("Owner:", owner)
+    hummingbird = [I1.location_x, I1.location_y, I1.location_z]
+    # print("Hummingbird:", hummingbird)
+    pelican = [I2.location_x, I2.location_y, I2.location_z]
+    # print("Pelican:", pelican)
+    # print("Velocity angle:", R1.velocity_angle)
+    # print("Others info:", intruders)
+    # rospy.loginfo("Current Location:", owner)
+    collision_detecter(owner, [hummingbird, pelican])
     if collision_detection() is  not True:
         steer_angle = steering_angle()
+        R1.velocity_angle = steer_angle
         if distance2target() > 1:
-            new_x = R1.location_x + velocity*cos(steer_angle)
-            new_y = R1.location_y + velocity*sin(steer_angle)
+            # print("Velocity angle:", steer_angle)
+            new_x = R1.location_x + R1.velocity*cos(steer_angle)
+            new_y = R1.location_y + R1.velocity*sin(steer_angle)
             publish_command([new_x, new_y, R1.target_z],[0, 0, 0])
             # print("Should:", [new_x, new_y, R1.target_z],[0, 0, 0])
         else:
@@ -81,9 +110,10 @@ def listener():
 
 if __name__ == '__main__':
     rospy.init_node('firefly_go2goal', anonymous=True)
-    velocity = 0.6
     firefly_command_publisher = rospy.Publisher('/firefly/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
-    R1 = Robot([0, 10, 2],[10, 0, 2])
+    R1 = Robot([0, 10, 2],[10, 0, 2], 0.6)
+    I1 = Intruder('hummingbird')
+    I2 = Intruder('pelican')
     while distance2initial() > 1:
         publish_command([R1.initial_x, R1.initial_y, R1.initial_z],[0.05, 0.05, 0.05])
     if distance2initial() <= 1:
@@ -91,4 +121,4 @@ if __name__ == '__main__':
         try:
             listener()
         except rospy.ROSInterruptException:
-            pass
+            passcollision_detection

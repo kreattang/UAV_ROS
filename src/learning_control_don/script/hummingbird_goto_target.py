@@ -46,7 +46,7 @@ def publish_command(position,velocity):
     point = MultiDOFJointTrajectoryPoint([transform],[velocities],[accelerations],rospy.Time(2))
     traj.points.append(point)
     firefly_command_publisher.publish(traj)
-    rospy.loginfo("Have published %s into %s!",position + velocity,'/Hummingbird/command/trajectory')
+    rospy.loginfo("Have published %s into %s!",position + velocity,'/hummingbird/command/trajectory')
     
 
 def collision_detection():
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     rospy.init_node('hummingbird_go2goal', anonymous=True)
     velocity = 0.6
     firefly_command_publisher = rospy.Publisher('/hummingbird/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
-    R1 = Robot([2, 0, 2],[4, 6, 2])
+    R1 = Robot([2, 2, 2],[7, 7, 2])
     while distance2initial() > 1:
         publish_command([R1.initial_x, R1.initial_y, R1.initial_z],[0.05, 0.05, 0.05])
     if distance2initial() <= 1:

@@ -97,7 +97,7 @@ class TurtleBot:
 if __name__ == '__main__':
     rospy.init_node('turtlebot_controller', anonymous=True)
     try:
-        x = TurtleBot([1,1])
+        x = TurtleBot([5,10])
         x.move2goal()
         
     except rospy.ROSInterruptException:
