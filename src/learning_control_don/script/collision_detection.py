@@ -60,7 +60,7 @@ def collision_detecter(owner, intruders):
     for i in intruders:
         d = get_distance([owner[0], owner[1]], [i[0], i[1]])
         # print("Distance:", d)
-        if d < 4 and d > R_vo:
+        if d < 3 and d > R_vo:
             print("In detection range!")
             Collision_angle = degrees(asin(R_vo/float(d)+0.001))
             print("Collision angle", Collision_angle)
