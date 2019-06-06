@@ -7,6 +7,7 @@ from geometry_msgs.msg import Twist
 def callback(data):
     '''learning_topic Callback Function'''
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data)
+    print(data.linear.x)
 
 def listener():
     '''learning_topic Subscriber'''
@@ -17,7 +18,7 @@ def listener():
     # run simultaneously.
     rospy.init_node('learning_topic', anonymous=True)
 
-    rospy.Subscriber("/turtle1/cmd_vel", Twist, callback)
+    rospy.Subscriber("/hummingbird/velocity", Twist, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()

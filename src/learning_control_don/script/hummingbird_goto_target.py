@@ -9,7 +9,7 @@ import std_msgs.msg
 from math import atan2, cos, sin, sqrt
 
 class Robot():
-    def __init__(self, location, target):
+    def __init__(self, location, target, velocity):
         self.location_x = 100
         self.location_y = 100
         self.location_z = 100
@@ -19,11 +19,18 @@ class Robot():
         self.target_x = target[0]
         self.target_y = target[1]
         self.target_z = target[2]
+        self.velocity = velocity
+        self.velocity_angle = 0
         self.pose_subscriber =  rospy.Subscriber("/hummingbird/ground_truth/odometry", Odometry, self.update_pose)
     def update_pose(self, data):
         self.location_x = data.pose.pose.position.x
         self.location_y = data.pose.pose.position.y
         self.location_z = data.pose.pose.position.z
+        owner_velocity = Twist()
+        owner_velocity.linear.x = self.velocity
+        owner_velocity.linear.y = self.velocity_angle
+        self.velocity_publisher = rospy.Publisher('/hummingbird/velocity', Twist, queue_size = 10)
+        self.velocity_publisher.publish(owner_velocity)
 
 def publish_command(position,velocity):
     desired_yaw = -10
@@ -67,9 +74,11 @@ def callback(data):
     # update_pose(data)
     if collision_detection() is  not True:
         steer_angle = steering_angle()
+        R1.velocity_angle = steer_angle
+        R1.velocity = 0.6
         if distance2target() > 1:
-            new_x = R1.location_x + velocity*cos(steer_angle)
-            new_y = R1.location_y + velocity*sin(steer_angle)
+            new_x = R1.location_x + R1.velocity*cos(steer_angle)
+            new_y = R1.location_y + R1.velocity*sin(steer_angle)
             publish_command([new_x, new_y, R1.target_z],[0, 0, 0])
             # print("Should:", [new_x, new_y, R1.target_z],[0, 0, 0])
         else:
@@ -81,11 +90,14 @@ def listener():
 
 if __name__ == '__main__':
     rospy.init_node('hummingbird_go2goal', anonymous=True)
-    velocity = 0.6
     firefly_command_publisher = rospy.Publisher('/hummingbird/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
-    R1 = Robot([2, 2, 2],[7, 7, 2])
+    velocity_publisher = rospy.Publisher('/hummingbird/velocity', Twist, queue_size = 10)
+    R1 = Robot([-1, -1, 2],[10, 10, 2], 0.6)
     while distance2initial() > 1:
-        publish_command([R1.initial_x, R1.initial_y, R1.initial_z],[0.05, 0.05, 0.05])
+        engine_angle = atan2(R1.initial_y - R1.location_y, R1.initial_x- R1.location_x)
+        publish_command([R1.location_x + 2*cos(engine_angle), R1.location_y+2*sin(engine_angle), R1.initial_z],[0, 0, 0])
+        R1.velocity = 2
+        R1.velocity_angle = engine_angle
     if distance2initial() <= 1:
         rospy.loginfo("Arrived initial location!")
         try:

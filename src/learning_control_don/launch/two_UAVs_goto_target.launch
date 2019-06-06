@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="learning_control_don" type="firefly_goto_target.py" name="firefly_goto_target" output="screen">
+    <node pkg="learning_control_don" type="pelican_goto_target.py" name="pelican_goto_target" output="screen">
     </node>
     <node pkg="learning_control_don" type="hummingbird_goto_target.py" name="hummingbird_goto_target" output="screen">
     </node>
