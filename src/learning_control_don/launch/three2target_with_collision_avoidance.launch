@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="learning_control_don" type="firefly_with_collision_avoidance.py" name="firefly_with_collision_avoidance" output="screen">
+    </node>
+    <node pkg="learning_control_don" type="hummingbird_with_collision_avoidance.py" name="hummingbird_with_collision_avoidance" output="screen">
+    </node>
+    <node pkg="learning_control_don" type="pelican_with_collision_avoidance.py" name="pelican_with_collision_avoidance"  output="screen">
+    </node>
+</launch>

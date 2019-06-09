@@ -2,13 +2,14 @@
 
 import rospy
 from math import atan2, cos, sin, sqrt, asin, degrees, fabs
-R_vo = 0.9
+R_vo = 1.2
 import time
 import numpy as np
+from fuzzy_control import Action
 
 def get_distance(position1, position2):
     return sqrt(pow((position1[0] - position2[0]), 2) +
-                    pow((position1[0] - position2[0]), 2))
+                    pow((position1[1] - position2[1]), 2))
 
 def relative_angle(owner, i):
     # retutn the direction agle
@@ -65,11 +66,11 @@ def CRAF(owner, i):
     a = relative_velocity.dot(Loaction_Vec)
     b = np.linalg.norm(relative_velocity)**2
     t_CPA = a/float(b)
-    print(t_CPA)
+    # print(t_CPA)
     P_ot = np.array([owner[0]+owner[3]*cos(owner[4])*t_CPA, owner[1]+owner[3]*sin(owner[4])*t_CPA])
     P_it = np.array([i[0]+i[3]*cos(i[4])*t_CPA, i[1]+i[3]*sin(i[4])*t_CPA])
     d_CPA = round(np.linalg.norm(P_ot - P_it),10)
-    print(d_CPA)
+    # print(d_CPA)
     d = get_distance([owner[0], owner[1]], [i[0], i[1]])
     Collision_angle = degrees(asin(R_vo/float(d)+0.001))
     Relative_angle = normalize_angle(degrees(relative_angle(owner, i)))
@@ -77,7 +78,7 @@ def CRAF(owner, i):
     alpha = fabs(Relative_angle - Velocity_angle)
     alpha_max = Collision_angle
     alpha_min = asin(0.3/(float(d)+0.001))
-    print(alpha)
+    # print(alpha)
     
     # calculate membership function
     if d_CPA >= 3:
@@ -100,26 +101,87 @@ def CRAF(owner, i):
         mu_alpha = (alpha_max - alpha) / float(alpha_max - alpha_min)
     
     craf = 1.0/3*mu_t + 1.0/3*mu_d + 1.0/3*mu_alpha
-    print(mu_t, mu_d, mu_alpha)
     return craf
 
 
-def collision_detecter(owner, intruders):
-    print(owner, intruders)
+
+
+def deal_conflicts(confllicts):
+    # print(confllicts)
+    temp = []
+    if len(confllicts) == 0:
+        pass
+    elif len(confllicts) == 1:
+        return confllicts[0]
+    else:
+        max_ROC = confllicts[0][1]
+        for i in confllicts:
+            if i[1] >= max_ROC:
+                temp = i
+                max_ROC = i[1]
+    # del temp[1]
+    return temp
+
+
+
+def simplify_by_CRAF(confllicts):
+    confllict_L = []
+    confllict_F = []
+    confllict_R = []
+    final_conflict = []
+    for c in confllicts:
+        if c[0] == 'L':
+            confllict_L.append(c)
+        if c[0] == 'F':
+            confllict_F.append(c)
+        if c[0] == 'R':
+            confllict_R.append(c)
+    # print( confllict_L,confllict_F,confllict_R)
+    for co in confllict_L,confllict_F,confllict_R:
+        # print(co)
+        if deal_conflicts(co):
+            temp = deal_conflicts(co)
+            del temp[1]
+            final_conflict.append(temp)
+    return final_conflict
+
+
+
+
+def collision_detecter(owner, intruders):  
+    # print(owner, intruders)
+    collision = []
     for i in intruders:
+        temp_collision = []
         d = get_distance([owner[0], owner[1]], [i[0], i[1]])
         print("Distance:", d)
-        if d < 3 and d > R_vo:
-            print("In detection range!")
+        if d < R_vo:
+            return [0.1, 0]
+        if d < 4.0 and d > R_vo:
+            # print("In detection range!")
             Collision_angle = degrees(asin(R_vo/float(d)+0.001))
-            print("Collision angle", Collision_angle)
+            # print("Collision angle", Collision_angle)
             Relative_angle = normalize_angle(degrees(relative_angle(owner, i)))
-            print("Relative angle", Relative_angle)
+            # print("Relative angle", Relative_angle)
             Velocity_angle = normalize_angle(degrees(owner[4]))
-            print("Velocity angle", Velocity_angle)
+            # print("Velocity angle", Velocity_angle)
             if fabs(Relative_angle - Velocity_angle) <= Collision_angle:
-                print("In VO!")
+                # print("In VO! \n")
                 relative_location = Relative_location(owner, i)
                 if relative_location:
-                    print(relative_location)
-                    print("CRAF", CRAF(owner, i))
+                    temp_collision.append(relative_location)
+                    temp_collision.append(CRAF(owner, i))
+                    temp_collision.append(d)
+                    temp_collision.append(i)
+                    # print("Collision information:", temp_collision)
+                if temp_collision:
+                    collision.append(temp_collision)
+    if collision:
+        sim_collision = simplify_by_CRAF(collision)
+        # print("Final collision:", sim_collision)
+        action = Action(sim_collision)
+        # print("Should action:", action)
+        if action:
+            return action
+
+                     

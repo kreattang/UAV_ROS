@@ -92,7 +92,7 @@ def listener():
 if __name__ == '__main__':
     rospy.init_node('hummingbird_go2goal', anonymous=True)
     firefly_command_publisher = rospy.Publisher('/pelican/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
-    R1 = Robot([10, 0, 2],[0, 10, 2], 0.6)
+    R1 = Robot([10, 0, 5],[0, 10, 2], 0.6)
     while distance2initial() > 1:
         engine_angle = atan2(R1.initial_y - R1.location_y, R1.initial_x- R1.location_x)
         publish_command([R1.location_x + 2*cos(engine_angle), R1.location_y+2*sin(engine_angle), R1.initial_z],[0, 0, 0])
