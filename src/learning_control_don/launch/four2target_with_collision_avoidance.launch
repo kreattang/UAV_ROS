@@ -1,0 +1,10 @@
+<launch>
+    <node pkg="learning_control_don" type="four_firefly.py" name="firefly_with_collision_avoidance" output="screen">
+    </node>
+    <node pkg="learning_control_don" type="four_hummingbird.py" name="hummingbird_with_collision_avoidance" output="screen">
+    </node>
+    <node pkg="learning_control_don" type="four_iris.py" name="iris_with_collision_avoidance"  output="screen">
+    </node>
+    <node pkg="learning_control_don" type="four_pelican.py" name="pelican_with_collision_avoidance"  output="screen">
+    </node>
+</launch>

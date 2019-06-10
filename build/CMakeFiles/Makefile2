@@ -455,6 +455,24 @@ learning_topic_turtle/preinstall:
 .PHONY : learning_topic_turtle/preinstall
 
 #=============================================================================
+# Directory level rules for directory multi_uav_control
+
+# Convenience name for "all" pass in the directory.
+multi_uav_control/all:
+
+.PHONY : multi_uav_control/all
+
+# Convenience name for "clean" pass in the directory.
+multi_uav_control/clean:
+
+.PHONY : multi_uav_control/clean
+
+# Convenience name for "preinstall" pass in the directory.
+multi_uav_control/preinstall:
+
+.PHONY : multi_uav_control/preinstall
+
+#=============================================================================
 # Directory level rules for directory learning_control_don
 
 # Convenience name for "all" pass in the directory.

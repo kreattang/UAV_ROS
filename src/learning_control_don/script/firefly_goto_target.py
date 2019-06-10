@@ -8,6 +8,8 @@ import time, tf, math
 import std_msgs.msg
 from math import atan2, cos, sin, sqrt
 
+path = Path()
+
 class Robot():
     def __init__(self, location, target, velocity):
         self.location_x = 100
@@ -21,8 +23,15 @@ class Robot():
         self.target_z = target[2]
         self.velocity = velocity
         self.velocity_angle = 0
-        self.pose_subscriber =  rospy.Subscriber("/firefly/ground_truth/odometry", Odometry, self.update_pose)
+       path = Path() self.pose_subscriber =  rospy.Subscriber("/firefly/ground_truth/odometry", Odometry, self.update_pose)
     def update_pose(self, data):
+        global path
+        path.header = data.header
+        pose = PoseStamped()
+        pose.header = data.header
+        pose.pose = data.pose.pose
+        path.poses.append(pose)
+        filter_path_pub.publish(path)
         self.location_x = data.pose.pose.position.x
         self.location_y = data.pose.pose.position.y
         self.location_z = data.pose.pose.position.z
@@ -90,21 +99,7 @@ def callback(data):
             new_x = R1.location_x + R1.velocity*cos(steer_angle)
             new_y = R1.location_y + R1.velocity*sin(steer_angle)
             publish_command([new_x, new_y, R1.target_z],[0, 0, 0])
-            # path = Path()
-            # path.header.frame_id = "world"
-            # path.header.stamp = rospy.Time.now()
-            # pose = PoseStamped()
-            # pose.header.frame_id = "world"
-            # pose.pose.position.x = float(R1.location_x)
-            # pose.pose.position.y = float(R1.location_y)
-            # pose.pose.position.z = float(R1.location_z)
-            # pose.pose.orientation.x = float(0)
-            # pose.pose.orientation.y = float(0)
-            # pose.pose.orientation.z = float(0)
-            # pose.pose.orientation.w = float(0)
-            # path.poses.append(pose)
-            # firefly_path_pub.publish(path)
-            # print("Should:", [new_x, new_y, R1.target_z],[0, 0, 0])
+           
         else:
             # publish_command([R1.location_x, R1.location_x, R1.target_z],[0, 0, 0])
             rospy.loginfo("Firefly Arrived target location!")
@@ -118,6 +113,7 @@ if __name__ == '__main__':
     path_pub = rospy.Publisher('/path', Path, queue_size=10)
     # firefly_path_pub = rospy.Publisher('/firefly/path', Path, queue_size=1)
     firefly_command_publisher = rospy.Publisher('/firefly/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
+    filter_path_pub = rospy.Publisher('/path', Path, queue_size=10)
     velocity_publisher = rospy.Publisher('/firefly/velocity', Twist, queue_size = 10)
     R1 = Robot([0, 10, 3],[10, 0, 2], 0.6)
     while distance2initial() > 1:

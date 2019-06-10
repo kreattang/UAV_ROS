@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="multi_uav_control" type="three_firefly1.py" name="three_firefly1" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="three_firefly2.py" name="three_firefly2" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="three_firefly3.py" name="three_firefly3" output="screen">
+    </node>
+</launch>

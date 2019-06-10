@@ -7,6 +7,7 @@
 subdirs(gtest)
 subdirs(create_pkg_test)
 subdirs(learning_topic_turtle)
+subdirs(multi_uav_control)
 subdirs(learning_control_don)
 subdirs(pkg_test)
 subdirs(ros_learning)
