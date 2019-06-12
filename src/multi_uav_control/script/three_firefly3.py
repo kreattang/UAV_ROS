@@ -100,7 +100,7 @@ def callback(data):
     if action is None:
         steer_angle = steering_angle()
         R1.velocity_angle = steer_angle
-        R1.velocity = 1
+        R1.velocity = 2
         if distance2target() > 1:
             new_x = R1.location_x + R1.velocity*cos(R1.velocity_angle)
             new_y = R1.location_y + R1.velocity*sin(R1.velocity_angle)
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     firefly1_path_pub = rospy.Publisher('/firefly3/path', Path, queue_size=10)
     firefly_command_publisher = rospy.Publisher('/firefly3/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
     velocity_publisher = rospy.Publisher('/firefly3/velocity', Twist, queue_size = 10)
-    R1 = Robot([0, 0, 3],[20, 20, 2], 1)
+    R1 = Robot([0, 0, 3],[20, 20, 2], 2)
     while distance2initial() > 1:
         engine_angle = atan2(R1.initial_y - R1.location_y, R1.initial_x- R1.location_x)
         publish_command([R1.location_x + 2*cos(engine_angle), R1.location_y+2*sin(engine_angle), R1.initial_z],[0, 0, 0])

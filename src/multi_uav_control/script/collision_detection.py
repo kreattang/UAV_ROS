@@ -87,7 +87,7 @@ def CRAF(owner, i):
     # print(alpha)
     
     # calculate membership function
-    if d_CPA >= 4:
+    if d_CPA >= 8:
         mu_d = 0
     elif d_CPA <= 0.5:
         mu_d = 1
@@ -161,8 +161,10 @@ def collision_detecter(owner, intruders):
         temp_collision = []
         d = get_distance([owner[0], owner[1]], [i[0], i[1]])
         print("Distance:", d)
-        if d < R_vo:
-            return [0.2, 0]
+        # if d < R_vo:
+        #     pass
+        # if d > R_vo and d < 2*R_vo:
+        #     return [1, 45]
         if d < 8.0 and d > 2*R_vo:
             print("In detection range!")
             Collision_angle = degrees(asin(2*R_vo/float(d)+0.001))

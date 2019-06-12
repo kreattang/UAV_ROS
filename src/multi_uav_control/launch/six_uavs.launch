@@ -1,0 +1,14 @@
+<launch>
+    <node pkg="multi_uav_control" type="six_firefly1.py" name="sixfirefly1" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="six_firefly2.py" name="six_firefly2" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="six_firefly3.py" name="six_firefly3" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="six_firefly4.py" name="six_firefly4" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="six_firefly5.py" name="six_firefly5" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="six_firefly6.py" name="six_firefly6" output="screen">
+    </node>
+</launch>

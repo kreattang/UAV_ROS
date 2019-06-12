@@ -8,7 +8,6 @@ import time, tf, math
 import std_msgs.msg
 from math import atan2, cos, sin, sqrt, degrees, radians
 from collision_detection import collision_detecter
-
 path = Path()
 
 class Robot():
@@ -97,7 +96,8 @@ def callback(data):
     owner = [R1.location_x, R1.location_y, R1.location_z, R1.velocity, R1.velocity_angle]
     firefly2 = [I1.location_x, I1.location_y, I1.location_z, I1.velocity, I1.velocity_angle]
     firefly3 = [I2.location_x, I2.location_y, I2.location_z, I2.velocity, I2.velocity_angle]
-    action = collision_detecter(owner, [firefly2, firefly3])
+    firefly4 = [I3.location_x, I3.location_y, I2.location_z, I3.velocity, I3.velocity_angle]
+    action = collision_detecter(owner, [firefly2, firefly3, firefly4])
     # print("All infos:", owner, [firefly2, firefly3])
     if action is None:
         steer_angle = steering_angle()
@@ -114,7 +114,7 @@ def callback(data):
     elif action is not None:
         print("Firefly1 Should action:", action)
         if action[0] + action[1] > 0:
-            R1.velocity = R1.velocity - (R1.velocity - 0.1)*float(action[0])
+            R1.velocity = R1.velocity - (R1.velocity - 0.3)*float(action[0])
             steer_angle = R1.velocity_angle - radians(float(action[1]))
             R1.velocity_angle = steer_angle
             if distance2target() > 1:
@@ -146,7 +146,7 @@ if __name__ == '__main__':
     firefly1_path_pub = rospy.Publisher('/firefly1/path', Path, queue_size=10)
     firefly_command_publisher = rospy.Publisher('/firefly1/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
     velocity_publisher = rospy.Publisher('/firefly1/velocity', Twist, queue_size = 10)
-    R1 = Robot([19, 1, 2],[0, 20, 2], 2)
+    R1 = Robot([20.5, -0.5, 2],[0, 20, 2], 2)
     while distance2initial() > 1:
         engine_angle = atan2(R1.initial_y - R1.location_y, R1.initial_x- R1.location_x)
         publish_command([R1.location_x + 2*cos(engine_angle), R1.location_y+2*sin(engine_angle), R1.initial_z],[0, 0, 0])
@@ -156,6 +156,7 @@ if __name__ == '__main__':
         rospy.loginfo("Firefly1 arrived initial location!")
         I1 = Intruder('firefly2')
         I2 = Intruder('firefly3')
+        I3 = Intruder('firefly4')
         try:
             listener()
         except rospy.ROSInterruptException:

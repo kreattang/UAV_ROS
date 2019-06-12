@@ -1,0 +1,18 @@
+<launch>
+    <node pkg="multi_uav_control" type="eight_firefly1.py" name="eight_firefly1" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly2.py" name="eight_firefly2" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly3.py" name="eight_firefly3" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly4.py" name="eight_firefly4" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly5.py" name="eight_firefly5" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly6.py" name="eight_firefly6" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly7.py" name="eight_firefly7" output="screen">
+    </node>
+    <node pkg="multi_uav_control" type="eight_firefly8.py" name="eight_firefly8" output="screen">
+    </node>
+</launch>
