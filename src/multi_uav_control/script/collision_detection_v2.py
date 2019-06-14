@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import rospy
-from math import atan2, cos, sin, sqrt, asin, degrees, fabs
+from math import atan2, cos, sin, sqrt, asin, degrees, fabs, radians
 R_vo = 1
 import time
 import numpy as np
@@ -63,6 +63,7 @@ def Relative_location(owner, i):
     return Rel_loaction
 
 def CRAF(owner, i):
+    print(owner, i)
     v1 = np.array([owner[3]*cos(owner[4]), owner[3]*sin(owner[4])])
     v2 = np.array([i[3]*cos(i[4]), i[3]*sin(i[4])])
     relative_velocity = v1 - v2
@@ -154,6 +155,45 @@ def simplify_by_CRAF(confllicts):
 
 
 
+
+
+def time2nearest_point(owner, i):
+    p1 = [owner[0], owner[1]]
+    p2 = [i[0], i[1]]
+    d = get_distance(p1, p2)
+    time = 0
+    while d > 1.2 and time < 10:
+        time = time + 0.1
+        # print(time)
+        p1 = [owner[0] + owner[3]*cos(owner[4])*time, owner[1] + owner[3]*sin(owner[4])*time]
+        p2 = [i[0]+i[3]*cos(i[4])*time, i[1]+i[3]*sin(i[4])*time]
+        # print(p1, p2)
+        d = get_distance(p1, p2)
+        # print(d)
+    # print(time)
+    return time
+        
+def simplify_by_time(confllicts):
+    confllict_L = []
+    confllict_F = []
+    confllict_R = []
+    final_conflict = []
+    for c in confllicts:
+        if c[0] == 'L':
+            confllict_L.append(c)
+        if c[0] == 'F':
+            confllict_F.append(c)
+        if c[0] == 'R':
+            confllict_R.append(c)
+    for co in confllict_L, confllict_F, confllict_R:
+        if co:
+            final_conflict.append(sorted(co, key=(lambda x:x[1]))[0])
+    if final_conflict:
+        return final_conflict
+
+
+
+
 def collision_detecter(owner, intruders):  
     # print(owner, intruders)
     collision = []
@@ -161,36 +201,37 @@ def collision_detecter(owner, intruders):
         temp_collision = []
         d = get_distance([owner[0], owner[1]], [i[0], i[1]])
         print("Distance:", d)
-        # if d < R_vo:
-        #     return [1, 0]
-        # if d > R_vo and d < 2*R_vo:
-        #     return [1, 45]
+        if d < 0.8*R_vo:
+            return [1, 0]
+        # if d > 1.5*R_vo and d < 2*R_vo:
+        #     return None
         if d < 8.0 and d > 2*R_vo:
-            print("In detection range!")
+            # print("In detection range!")
             Collision_angle = degrees(asin(2*R_vo/float(d)+0.001))
-            print("Collision angle", Collision_angle)
+            # print("Collision angle", Collision_angle)
             Relative_angle = normalize_angle(degrees(relative_angle(owner, i)))
-            print("Relative angle", Relative_angle)
+            # print("Relative position angle", Relative_angle)
             Velocity_angle = normalize_angle(degrees(relative_velocity_angle(owner, i)))
-            print("Velocity angle", Velocity_angle)
+            # print("Relative velocity angle", Velocity_angle)
             if fabs(Relative_angle - Velocity_angle) <= Collision_angle:
-                print("In VO!")
+                # print("In VO!")
                 # print("info:", i)
                 relative_location = Relative_location(owner, i)
                 if relative_location:
                     # print("Relative Location:", relative_location)
+                    # print("Time to nearest point:", time2nearest_point(owner,i))
                     temp_collision.append(relative_location)
-                    temp_collision.append(CRAF(owner, i))
+                    temp_collision.append(time2nearest_point(owner,i))
                     temp_collision.append(d)
                     temp_collision.append(i)
                 if temp_collision:
                     # print("One collision:", temp_collision)
                     collision.append(temp_collision)      
     if collision:
-        print("All colliaion:", collision)
-        sim_collision = simplify_by_CRAF(collision)
+        # print("All colliaion:", collision)
+        sim_collision = simplify_by_time(collision)
         print("Final collision:", sim_collision)
-        # return None    
+    #     # return None    
         action = Action(sim_collision)
         print("Should action:", action)
         if action:

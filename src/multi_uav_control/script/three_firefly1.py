@@ -7,7 +7,7 @@ from geometry_msgs.msg import Vector3,Twist,Transform,Quaternion,Point, PointSta
 import time, tf, math
 import std_msgs.msg
 from math import atan2, cos, sin, sqrt, degrees, radians
-from collision_detection import collision_detecter
+from collision_detection_v2 import collision_detecter
 
 path = Path()
 

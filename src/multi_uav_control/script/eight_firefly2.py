@@ -7,7 +7,7 @@ from geometry_msgs.msg import Vector3,Twist,Transform,Quaternion,Point, PointSta
 import time, tf, math
 import std_msgs.msg
 from math import atan2, cos, sin, sqrt, degrees, radians
-from collision_detection import collision_detecter
+from collision_detection_v2 import collision_detecter
 path = Path()
 
 class Robot():
@@ -114,7 +114,7 @@ def callback(data):
     elif action is not None:
         print("Firefly2 Should action:", action)
         if action[0] + action[1] > 0:
-            R1.velocity = R1.velocity - (R1.velocity - 0.3)*float(action[0])
+            R1.velocity = R1.velocity - (R1.velocity - 0.1)*float(action[0])
             steer_angle = R1.velocity_angle - radians(float(action[1]))
             R1.velocity_angle = steer_angle
             if distance2target() > 1:

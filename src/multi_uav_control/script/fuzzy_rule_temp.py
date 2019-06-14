@@ -61,7 +61,7 @@ FC_R = ctrl.ControlSystemSimulation(FR_R)
 
 #Two directions
 # LF
-rule10 = ctrl.Rule(d_L['F'] & d_F['F'], v['H'])
+rule10 = ctrl.Rule(d_L['F'] & d_F['F'], v['VL'])
 rule11 = ctrl.Rule(d_L['F'] & d_F['N'], v['L'])
 rule11_1 = ctrl.Rule(d_L['F'] & d_F['N'], theta['M'])
 rule12 = ctrl.Rule(d_L['N'] & d_F['F'], v['H'])
@@ -72,7 +72,7 @@ FR_LF = ctrl.ControlSystem([rule10, rule11, rule11_1, rule12, rule12_1, rule13, 
 FC_LF = ctrl.ControlSystemSimulation(FR_LF)
 
 # RF
-rule15 = ctrl.Rule(d_R['F'] & d_F['F'], v['H'])
+rule15 = ctrl.Rule(d_R['F'] & d_F['F'], v['VL'])
 rule15_1 = ctrl.Rule(d_R['F'] & d_F['F'], theta['B'])
 rule16 = ctrl.Rule(d_R['F'] & d_F['N'], v['L'])
 rule17 = ctrl.Rule(d_R['F'] & d_F['N'], theta['M'])
@@ -84,7 +84,7 @@ FR_RF = ctrl.ControlSystem([rule15, rule15_1, rule16, rule17, rule18, rule19, ru
 FC_RF = ctrl.ControlSystemSimulation(FR_RF)
 
 # LR
-rule22 = ctrl.Rule(d_L['F'] & d_R['F'], v['H'])
+rule22 = ctrl.Rule(d_L['F'] & d_R['F'], v['VL'])
 rule23 = ctrl.Rule(d_L['F'] & d_R['F'], theta['B'])
 rule24 = ctrl.Rule(d_L['F'] & d_R['N'], v['H'])
 rule25 = ctrl.Rule(d_L['F'] & d_R['N'], theta['M'])
@@ -97,7 +97,7 @@ FC_LR = ctrl.ControlSystemSimulation(FR_LR)
 
 
 #Three directions
-rule30 = ctrl.Rule(d_L['F'] & d_R['F'] & d_F['F'], v['H'])
+rule30 = ctrl.Rule(d_L['F'] & d_R['F'] & d_F['F'], v['VL'])
 rule31 = ctrl.Rule(d_L['N'] & d_R['F'] & d_F['F'], v['H'])
 rule32 = ctrl.Rule(d_L['N'] & d_R['F'] & d_F['F'], theta['VB'])
 rule33 = ctrl.Rule(d_L['F'] & d_R['N'] & d_F['F'], v['H'])
