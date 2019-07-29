@@ -91,7 +91,7 @@ def distance2target():
 
 def distance2initial():
     return sqrt(pow((R1.initial_x - R1.location_x), 2) +
-                    pow((R1.initial_y - R1.location_y), 2))
+              t      pow((R1.initial_y - R1.location_y), 2))
 def callback(data):
     owner = [R1.location_x, R1.location_y, R1.location_z, R1.velocity, R1.velocity_angle]
     global robot_list

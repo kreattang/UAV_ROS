@@ -118,6 +118,8 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/wenbing/Learning_ROS_ws/build/gtest/cmake_install.cmake")
   include("/home/wenbing/Learning_ROS_ws/build/create_pkg_test/cmake_install.cmake")
+  include("/home/wenbing/Learning_ROS_ws/build/GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast/cmake_install.cmake")
+  include("/home/wenbing/Learning_ROS_ws/build/follow_robot/cmake_install.cmake")
   include("/home/wenbing/Learning_ROS_ws/build/learning_topic_turtle/cmake_install.cmake")
   include("/home/wenbing/Learning_ROS_ws/build/multi_uav_control/cmake_install.cmake")
   include("/home/wenbing/Learning_ROS_ws/build/learning_control_don/cmake_install.cmake")

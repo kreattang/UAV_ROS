@@ -2,10 +2,19 @@
 
 import rospy
 from math import atan2, cos, sin, sqrt, asin, degrees, fabs, radians
-R_vo = 1
+R_vo = 1.5
 import time
 import numpy as np
-from fuzzy_control import Action
+from fuzzy_control_new import Action
+# from insert_record_mongo import insert_to_databse
+import csv
+# now = time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time())) 
+# fname="/home/wenbing/Learning_ROS_ws/src/multi_uav_control/src/trajectory/"+now+r"trajectory.csv"
+# csvFile = open(fname,'wb')
+# csvFile.close()
+# csv_trajectory = open(fname, 'a')
+# writer = csv.writer(csv_trajectory)
+
 
 def get_distance(position1, position2):
     return sqrt(pow((position1[0] - position2[0]), 2) +
@@ -16,7 +25,7 @@ def relative_angle(owner, i):
     return atan2(i[1] - owner[1], i[0]- owner[0])
 
 def relative_velocity_angle(owner, i):
-    point1 = [owner[0]+owner[3]*cos(owner[4])-i[3]*cos(i[4]), owner[1]+owner[3]*sin(owner[4]-i[3]*sin(i[4]))]
+    point1 = [owner[0]+owner[3]*cos(owner[4])-i[3]*cos(i[4]), owner[1]+owner[3]*sin(owner[4])-i[3]*sin(i[4])]
     point2 = [owner[0], owner[1]]
     # print(point1, point2)
     return atan2(point1[1]-point2[1], point1[0]-point2[0])
@@ -162,7 +171,7 @@ def time2nearest_point(owner, i):
     p2 = [i[0], i[1]]
     d = get_distance(p1, p2)
     time = 0
-    while d > 1.2 and time < 10:
+    while d >5 and time < 10:
         time = time + 0.1
         # print(time)
         p1 = [owner[0] + owner[3]*cos(owner[4])*time, owner[1] + owner[3]*sin(owner[4])*time]
@@ -194,15 +203,21 @@ def simplify_by_time(confllicts):
 
 
 
-def collision_detecter(owner, intruders):  
-    # print(owner, intruders)
+def collision_detecter(owner, intruders):
+    # record = {}
+    # record['data_type'] = 'trajectory'
+    # record['name'] = robot_name
+    # record['own_loac'] = owner
+    # record['intruders'] = intruders
+    # record['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    # insert_to_databse(record)
     collision = []
     for i in intruders:
         temp_collision = []
         d = get_distance([owner[0], owner[1]], [i[0], i[1]])
         print("Distance:", d)
-        if d < 0.8*R_vo:
-            return [1, 0]
+        # if d < 0.5*R_vo:
+        #     return [1, 5]
         # if d > 1.5*R_vo and d < 2*R_vo:
         #     return None
         if d < 8.0 and d > 2*R_vo:
@@ -228,13 +243,34 @@ def collision_detecter(owner, intruders):
                     # print("One collision:", temp_collision)
                     collision.append(temp_collision)      
     if collision:
+        # record_collision = {}
+        # record_collision['data_type'] = 'all_collision'
+        # record_collision['name'] = robot_name
+        # record_collision['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        # record_collision['all_collision'] = collision
         # print("All colliaion:", collision)
+        # insert_to_databse(record_collision)
         sim_collision = simplify_by_time(collision)
-        print("Final collision:", sim_collision)
+        # print("Final collision:", sim_collision)
+        # record_sim_collision = {}
+        # record_sim_collision['data_type'] = 'sim_collision'
+        # record_sim_collision['name'] = robot_name
+        # # record_sim_collision['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        # record_sim_collision['sim_collision'] = sim_collision
+        # insert_to_databse(record_sim_collision)
     #     # return None    
         action = Action(sim_collision)
-        print("Should action:", action)
+        # print("Should action:", action)
         if action:
+            # record_action= {}
+            # record_action['data_type'] = 'action'
+            # record_action['name'] = robot_name
+            # record_action['time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+            # record_action['action'] = action
+            # insert_to_databse(record_action)
+            # print("ACTION INFO:",robot_name, action)
             return action
+            
+
 
                      

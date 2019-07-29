@@ -6,6 +6,8 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs(gtest)
 subdirs(create_pkg_test)
+subdirs(GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast)
+subdirs(follow_robot)
 subdirs(learning_topic_turtle)
 subdirs(multi_uav_control)
 subdirs(learning_control_don)

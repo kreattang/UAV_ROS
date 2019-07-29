@@ -146,7 +146,7 @@ if __name__ == '__main__':
     firefly8_path_pub = rospy.Publisher('/firefly8/path', Path, queue_size=10)
     firefly_command_publisher = rospy.Publisher('/firefly8/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
     velocity_publisher = rospy.Publisher('/firefly8/velocity', Twist, queue_size = 10)
-    R1 = Robot([23, 10, 1],[-3, 10, 2], 2)
+    R1 = Robot([20, 10, 1],[0, 10, 2], 2)
     while distance2initial() > 1:
         engine_angle = atan2(R1.initial_y - R1.location_y, R1.initial_x- R1.location_x)
         publish_command([R1.location_x + 2*cos(engine_angle), R1.location_y+2*sin(engine_angle), R1.initial_z],[0, 0, 0])

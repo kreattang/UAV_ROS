@@ -13,6 +13,7 @@ path = Path()
 
 class Robot():
     def __init__(self, location, target, velocity):
+        self.name = 'firefly4'
         self.location_x = 100
         self.location_y = 100
         self.location_z = 100
@@ -76,7 +77,8 @@ def publish_command(position,velocity):
     traj.points.append(point)
     firefly_command_publisher.publish(traj)
     rospy.loginfo("Have published %s into %s!",position + velocity,'/firefly4/command/trajectory')
-    
+    # rate = rospy.Rate(100)
+    # rate.sleep()
 
 def collision_detection():
     return False

@@ -223,6 +223,9 @@ LSB_RELEASE_EXECUTABLE:FILEPATH=/usr/bin/lsb_release
 //Path to a program.
 NOSETESTS:FILEPATH=/usr/bin/nosetests-2.7
 
+//The directory containing a CMake configuration file for OpenCV.
+OpenCV_DIR:PATH=/opt/ros/kinetic/share/OpenCV-3.3.1-dev
+
 //Path to a program.
 PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python
 
@@ -259,6 +262,9 @@ _gtest_INCLUDES:FILEPATH=/usr/include/gtest/gtest.h
 //Path to a file.
 _gtest_SOURCES:FILEPATH=/usr/src/gtest/src/gtest.cc
 
+//The directory containing a CMake configuration file for actionlib_msgs.
+actionlib_msgs_DIR:PATH=/opt/ros/kinetic/share/actionlib_msgs/cmake
+
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/opt/ros/kinetic/share/catkin/cmake
 
@@ -273,6 +279,21 @@ create_pkg_test_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/create_pkg_t
 
 //The directory containing a CMake configuration file for diagnostic_msgs.
 diagnostic_msgs_DIR:PATH=/opt/ros/kinetic/share/diagnostic_msgs/cmake
+
+//Value Computed by CMake
+fast_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast
+
+//Dependencies for target
+fast_LIB_DEPENDS:STATIC=
+
+//Value Computed by CMake
+fast_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast
+
+//Value Computed by CMake
+follow_robot_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/follow_robot
+
+//Value Computed by CMake
+follow_robot_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/follow_robot
 
 //The directory containing a CMake configuration file for gencpp.
 gencpp_DIR:PATH=/opt/ros/kinetic/share/gencpp/cmake
@@ -334,6 +355,39 @@ gtest_force_shared_crt:BOOL=OFF
 
 //Dependencies for the target
 gtest_main_LIB_DEPENDS:STATIC=general;-lpthread;general;gtest;
+
+//The directory containing a CMake configuration file for hector_pose_estimation.
+hector_pose_estimation_DIR:PATH=hector_pose_estimation_DIR-NOTFOUND
+
+//Value Computed by CMake
+hector_quadrotor_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/hector_quadrotor/hector_quadrotor
+
+//Value Computed by CMake
+hector_quadrotor_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/hector_quadrotor/hector_quadrotor
+
+//Value Computed by CMake
+hector_quadrotor_demo_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/hector_quadrotor/hector_quadrotor_demo
+
+//Value Computed by CMake
+hector_quadrotor_demo_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/hector_quadrotor/hector_quadrotor_demo
+
+//Value Computed by CMake
+hector_quadrotor_description_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/hector_quadrotor/hector_quadrotor_description
+
+//Value Computed by CMake
+hector_quadrotor_description_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/hector_quadrotor/hector_quadrotor_description
+
+//Value Computed by CMake
+hector_quadrotor_pose_estimation_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/hector_quadrotor/hector_quadrotor_pose_estimation
+
+//Value Computed by CMake
+hector_quadrotor_pose_estimation_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/hector_quadrotor/hector_quadrotor_pose_estimation
+
+//Value Computed by CMake
+hector_uav_msgs_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/hector_quadrotor/hector_uav_msgs
+
+//Value Computed by CMake
+hector_uav_msgs_SOURCE_DIR:STATIC=/home/wenbing/Learning_ROS_ws/src/hector_quadrotor/hector_uav_msgs
 
 //Value Computed by CMake
 learning_control_don_BINARY_DIR:STATIC=/home/wenbing/Learning_ROS_ws/build/learning_control_don
@@ -539,7 +593,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=10
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=12
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -578,6 +632,8 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding OpenCV
+FIND_PACKAGE_MESSAGE_DETAILS_OpenCV:INTERNAL=[/opt/ros/kinetic][v3.3.1()]
 //Details about finding PythonInterp
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v2.7.12()]
 //Details about finding Threads

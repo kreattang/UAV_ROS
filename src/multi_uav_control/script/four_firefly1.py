@@ -9,9 +9,13 @@ import std_msgs.msg
 from math import atan2, cos, sin, sqrt, degrees, radians
 from collision_detection_v2 import collision_detecter
 path = Path()
+time_UAV1 = []
+sep = ','
+
 
 class Robot():
     def __init__(self, location, target, velocity):
+        self.name = 'firefly1'
         self.location_x = 100
         self.location_y = 100
         self.location_z = 100
@@ -63,8 +67,8 @@ def publish_command(position,velocity):
     traj = MultiDOFJointTrajectory()
     header = std_msgs.msg.Header()
     header.stamp = rospy.Time()
-    header.frame_id = 'frame'
-    traj.joint_names.append('base_link')
+    # header.frame_id =
+    # traj.joint_names.append('base_link')
     traj.header = header
     transform = Transform(translation=Point(desired_x,desired_y,desired_z),rotation=Quaternion(quaternion[0],quaternion[1],quaternion[2],quaternion[3]))
     velocities = Twist()
@@ -76,7 +80,8 @@ def publish_command(position,velocity):
     traj.points.append(point)
     firefly_command_publisher.publish(traj)
     rospy.loginfo("Have published %s into %s!",position + velocity,'/firefly1/command/trajectory')
-    
+    # rate = rospy.Rate(50)
+    # rate.sleep()
 
 def collision_detection():
     return False
@@ -97,6 +102,7 @@ def callback(data):
     firefly2 = [I1.location_x, I1.location_y, I1.location_z, I1.velocity, I1.velocity_angle]
     firefly3 = [I2.location_x, I2.location_y, I2.location_z, I2.velocity, I2.velocity_angle]
     firefly4 = [I3.location_x, I3.location_y, I2.location_z, I3.velocity, I3.velocity_angle]
+    # start = time.clock()
     action = collision_detecter(owner, [firefly2, firefly3, firefly4])
     # print("All infos:", owner, [firefly2, firefly3])
     if action is None:
@@ -106,11 +112,23 @@ def callback(data):
         if distance2target() > 1:
             new_x = R1.location_x + R1.velocity*cos(R1.velocity_angle)
             new_y = R1.location_y + R1.velocity*sin(R1.velocity_angle)
+            print("curent target:", new_x, new_y)
+            print("curent location:",R1.location_x, R1.location_y)
+            # new_xx = new_x - 1.40
+            # new_yy = new_y + 1.40
             publish_command([new_x, new_y, R1.target_z],[0, 0, 0])
-            # print("Should:", [new_x, new_y, R1.target_z],[0, 0, 0])
+            # print("publish info:", [new_x, new_y, R1.target_z],[0, 0, 0])
+            # print(R1.location_x, R1.location_y)
+            # used_time = time.clock()-start
+            # time_UAV1.append(used_time)
         else:
             # publish_command([R1.location_x, R1.location_x, R1.target_z],[0, 0, 0])
             rospy.loginfo("Firefly1 arrived target location!")
+            # for ii in range(len(time_UAV1)):
+            #     time_UAV1[ii] = str(time_UAV1[ii])
+            # with open('/home/wenbing/Learning_ROS_ws/src/multi_uav_control/script/time_uav1.csv', 'a') as f:
+            #     f.write(sep.join(time_UAV1))
+            # rospy.loginfo("Writing")
     elif action is not None:
         print("Firefly1 Should action:", action)
         if action[0] + action[1] > 0:
@@ -121,11 +139,17 @@ def callback(data):
                 new_x = R1.location_x + R1.velocity*cos(R1.velocity_angle)
                 new_y = R1.location_y + R1.velocity*sin(R1.velocity_angle)
                 publish_command([new_x, new_y, R1.target_z],[0, 0, 0])
-                # print("Should:", [new_x, new_y, R1.target_z],[0, 0, 0])
+                print("Should:", [new_x, new_y, R1.target_z],[0, 0, 0])
+                # used_time = time.clock()-start
+                # time_UAV1.append(used_time)
             else:
                 # publish_command([R1.location_x, R1.location_x, R1.target_z],[0, 0, 0])
                 rospy.loginfo("Firefly1 arrived target location!")
-
+                # for ii in range(len(time_UAV1)):
+                #     time_UAV1[ii] = str(time_UAV1[ii])
+                # with open('./time_uav1.csv', 'a') as f:
+                #     f.write(sep.join(time_UAV1))
+                # rospy.loginfo("Writing")
 
 def publish_trajectory(data):
     global path
@@ -144,7 +168,7 @@ def listener():
 if __name__ == '__main__':
     rospy.init_node('firefly1_go2goal', anonymous=True)
     firefly1_path_pub = rospy.Publisher('/firefly1/path', Path, queue_size=10)
-    firefly_command_publisher = rospy.Publisher('/firefly1/command/trajectory',MultiDOFJointTrajectory,queue_size=10)
+    firefly_command_publisher = rospy.Publisher('/firefly1/command/trajectory',MultiDOFJointTrajectory,queue_size=1)
     velocity_publisher = rospy.Publisher('/firefly1/velocity', Twist, queue_size = 10)
     R1 = Robot([20.5, -0.5, 2],[0, 20, 2], 2)
     while distance2initial() > 1:

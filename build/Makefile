@@ -296,6 +296,32 @@ _catkin_empty_exported_target/fast:
 .PHONY : _catkin_empty_exported_target/fast
 
 #=============================================================================
+# Target rules for targets named fast
+
+# Build rule for target.
+fast: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fast
+.PHONY : fast
+
+# fast build rule for target.
+fast/fast:
+	$(MAKE) -f GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast/CMakeFiles/fast.dir/build.make GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast/CMakeFiles/fast.dir/build
+.PHONY : fast/fast
+
+#=============================================================================
+# Target rules for targets named fast_test
+
+# Build rule for target.
+fast_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fast_test
+.PHONY : fast_test
+
+# fast build rule for target.
+fast_test/fast:
+	$(MAKE) -f GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast/CMakeFiles/fast_test.dir/build.make GAAS/software/SLAM/ygz_slam_ros/Thirdparty/fast/CMakeFiles/fast_test.dir/build
+.PHONY : fast_test/fast
+
+#=============================================================================
 # Target rules for targets named std_msgs_generate_messages_lisp
 
 # Build rule for target.
@@ -903,6 +929,8 @@ help:
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... _catkin_empty_exported_target"
+	@echo "... fast"
+	@echo "... fast_test"
 	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_eus"
 	@echo "... std_msgs_generate_messages_nodejs"

@@ -191,7 +191,9 @@ def collision_detecter(owner, intruders):
         sim_collision = simplify_by_CRAF(collision)
         print("Final collision:", sim_collision)
         # return None    
-        action = Action(sim_collision)
+        action = None
+        if sim_collision:
+            action = Action(sim_collision)
         print("Should action:", action)
         if action:
             return action
